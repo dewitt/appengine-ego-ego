@@ -1,0 +1,76 @@
+{% extends "base.tmpl" %}
+
+{% block extra_links %}
+ 
+    <link rel="search" 
+          type="application/opensearchdescription+xml" 
+          title="{{ name }}" 
+          href="/friendfeed/{{ nickname }}/osd/" />
+
+{% endblock extra_links %}
+
+{% block content %}
+
+    <p>
+      Done!  We've created a <a class="external" href="http://www.google.com/coop/cse/">custom search engine</a> just for you, {{ name }}.
+    </p>
+
+    <div class="section">
+      <p>
+       <span class="number">1.</span> Configure your browser by selecting  Add "{{ name }}" in the drop down above. (Firefox and IE only.)
+      </p>
+
+      <p class="snippet">
+        <img src="/images/dropdown_small.png"/>
+      </p>
+    </div>
+
+
+    <div class="section">
+      <p>
+        <span class="number">2.</span>Publish your search engine by copying this html into the <code>&lt;head/&gt;</code> section of your site.
+      </p>
+ 
+      <div class="snippet"><code><pre>&lt;link rel="search" 
+      type="application/opensearchdescription+xml" 
+      title="{{ name }}" 
+      href="http://ego-ego.appspot.com/friendfeed/{{ nickname }}/osd/" /&gt;</pre></code></div>
+    </div>
+
+    <div class="section">
+      <p>
+        <span class="number">3.</span>  Bookmark your new customized Google page.
+      </p>
+      <p class="snippet">
+        <a class="external" href="http://www.google.com/cse?cref=http://ego-ego.appspot.com/friendfeed/{{ nickname }}/cref/">{{ name }}</a>
+      </p>
+    </div>
+
+    <div class="section">
+      <p>
+       <span class="number">4.</span> Give it try right now.
+      </p>
+
+      <form action="http://www.google.com/cse" id="cse-search-box">
+        <fieldset>
+          <input type="hidden" name="cref" value="http://ego-ego.appspot.com/friendfeed/{{ nickname }}/cref/" />
+          <input type="hidden" name="ie" value="UTF-8" />
+          <input type="text" name="q" size="31" value="{{ name }}"/>
+          <input type="submit" name="sa" value="Search" />
+        </fieldset>
+      </form>
+      <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script>
+    </div>
+
+
+   <script type="text/javascript"> 
+     $(document).ready(function() {
+       // Hack to reload the CSE so that it is fast when the user clicks on the link
+       var preload = document.createElement('img');
+       preload.src = "http://www.google.com/cse?cref=http://ego-ego.appspot.com/friendfeed/{{ nickname }}/cref/";
+       // Send focus to the search box
+       // $(":input:visible:enabled:first").focus();
+     });
+   </script>
+
+{% endblock content %}

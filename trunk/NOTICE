@@ -1,0 +1,12 @@
+NOTICE
+
+The simplejson library (http://simplejson.googlecode.com) is used under the terms of the MIT license and is copyright Bob Ippolito.  See http://simplejson.googlecode.com/svn/trunk/LICENSE.txt for details.
+
+The decorator library (http://pypi.python.org/pypi/decorator) is used under the terms of the BSD license and is copyright Michele Simionato.
+
+The jQuery library (http://jquery.com/) is used under the terms of the MIT license is is copyright John Resig.  See http://dev.jquery.com/browser/trunk/jquery/MIT-LICENSE.txt for details.
+
+The YUI library (http://developer.yahoo.com/yui/) is used under the terms of the BSD license and is copyright Yahoo.  See http://developer.yahoo.com/yui/license.html for details.
+
+This code is made available under the Apache License and is copyright DeWitt Clinton.
+

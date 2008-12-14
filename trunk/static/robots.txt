@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /friendfeed
+Disallow: /user
+Disallow: /cref
+Disallow: /osd
+

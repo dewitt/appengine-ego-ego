@@ -1,0 +1,32 @@
+<Annotations>
+
+  <Annotation about="friendfeed.com/{{ nickname }}">
+    <Label name="include"/>
+  </Annotation>  
+
+  <Annotation about="friendfeed.com/{{ nickname }}?start=*" score="1.0">
+    <Label name="include"/>
+  </Annotation>
+
+  <Annotation about="friendfeed.com/{{ nickname }}/discussion"  score="1.0">
+    <Label name="include"/>
+  </Annotation>
+
+  <Annotation about="friendfeed.com/{{ nickname }}/discussion?start=*"  score="1.0">
+    <Label name="include"/>
+  </Annotation>
+
+  <Annotation about="friendfeed.com/{{ nickname }}/comments"  score="1.0">
+    <Label name="include"/>
+  </Annotation>
+
+  <Annotation about="friendfeed.com/{{ nickname }}/comments?start=*"  score="1.0">
+    <Label name="include"/>
+  </Annotation>
+
+  {% for cse_name in cse_names %}
+  <Annotation about="{{ cse_name }}" score="0.5">
+    <Label name="include"/>
+  </Annotation>  
+  {% endfor %}
+</Annotations>
