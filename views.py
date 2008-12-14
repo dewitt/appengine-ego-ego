@@ -25,6 +25,8 @@ from django import http
 
 from decorator import *
 
+from xml.sax.saxutils import escape
+
 CREF_MIMETYPE = 'text/xml'
 ANNOTATIONS_MIMETYPE = 'text/xml'
 OSD_MIMETYPE = 'application/opensearchdescription+xml'
@@ -170,6 +172,7 @@ def _get_cse_names(friendfeed_profile):
   for service in friendfeed_profile['services']:
     try:
       cse_name = service['profileUrl']
+      cse_name = escape(cse_name)
     except:
       logging.warning('No profile for %s' % service)
       continue

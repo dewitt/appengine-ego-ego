@@ -38,6 +38,8 @@ import django.template.loaders.filesystem
 
 import simplejson
 
+from xml.sax.saxutils import escape
+
 import urls
 import views
 
