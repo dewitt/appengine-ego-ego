@@ -249,9 +249,14 @@ def CrefView(request, nickname):
   if not request.path.islower():
     return http.HttpResponseRedirect(request.path.lower())
 
-  friendfeed_profile = get_friendfeed_profile(nickname)
-  name = _get_friendfeed_name(friendfeed_profile, nickname)
-  cse_names = _get_cse_names(friendfeed_profile)
+  try:
+    friendfeed_profile = get_friendfeed_profile(nickname)
+    name = _get_friendfeed_name(friendfeed_profile, nickname)
+    cse_names = _get_cse_names(friendfeed_profile)
+  except UserError:
+    cse_names = []
+    nickname = None
+    name = None
 
   template_data = {'nickname': nickname, 
                    'name':  name,
@@ -271,8 +276,11 @@ def AnnotationView(request, nickname, start_index=0):
     return http.HttpResponseRedirect(request.path.lower())
 
   start_index = int(start_index)
-  friendfeed_profile = get_friendfeed_profile(nickname)
-  all_cse_names = _get_cse_names(friendfeed_profile)
+  try:
+    friendfeed_profile = get_friendfeed_profile(nickname)
+    all_cse_names = _get_cse_names(friendfeed_profile)
+  except UserError:
+    all_cse_names = []
   end_index = min(len(all_cse_names), start_index + 50)
   cse_names = all_cse_names[start_index:end_index]
 
