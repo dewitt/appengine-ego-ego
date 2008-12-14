@@ -1,0 +1,28 @@
+{% extends "base.tmpl" %}
+
+{% block content %}
+
+<p>
+  Search your sites just by entering your <a class="external" href="http://friendfeed.com/">FriendFeed</a> nickname.  (Public profiles only.)
+</p>
+
+<form action="/user/" method="post" id="home-form">
+
+<fieldset>
+  <label for="nickname">FriendFeed Nickname:</label>
+  <input type="text" name="nickname" />
+  <input type="submit" value="Go" />
+</fieldset>
+</form>
+
+<script type="text/javascript"> 
+  $(document).ready(function() {
+    // Hack to reload the CSE so that it is fast when the user clicks on the link
+    var preload = document.createElement('img');
+    preload.src = "http://www.google.com/cse?cref=http://ego-ego.appspot.com/friendfeed/{{ friendfeed_name }}/cref/";
+    // Send focus to the search box
+    $(":input:visible:enabled:first").focus();
+});
+</script>
+
+{% endblock content %}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ego! Ego!  {{ name }}</title>
+    <link rel="stylesheet" href="/css/reset-fonts-grids.css" type="text/css"/>
+    <link rel="stylesheet" href="/css/style.css" type="text/css"/>
+    <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico" />
+    <script type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>
+    {% block extra_links %} {% endblock extra_links %}
+
+  </head>
+
+  <body>
+    <div id="doc4">
+      <div id="hd">
+        <div id="logo">
+           <a href="/">Ego! Ego!</a>
+        </div>
+      </div> <!-- hd -->
+ 
+      <div id="bd">
+         {% block content %}{% endblock content %}
+      </div> <!-- bd -->
+
+      <div id="ft">
+        Copyright 2008 <a class="external" href="http://unto.net/">DeWitt Clinton</a> -
+        <a href="/faq/">FAQ</a> -
+        <a class="external" href="http://friendfeed.com/e/265ebf9d-3341-4010-96d6-40adc285f7d8/Ego-Ego/">Discuss</a>
+      </div>  <!-- ft -->
+
+    </div>  <!-- doc -->
+  </body>
+
+</html>
+
