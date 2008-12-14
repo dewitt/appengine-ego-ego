@@ -21,6 +21,7 @@
 import logging
 logging.debug('Beginning main.py')
 import os
+import re
 import sys
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
@@ -32,8 +33,11 @@ import django.core
 import django.core.handlers.wsgi
 import django.core.mail
 import django.db
+import django.db.models
+import django.db.models.signals
 import django.dispatch.dispatcher
 import django.middleware.common
+import django.middleware.http
 import django.template.loaders.filesystem
 
 import simplejson
