@@ -21,6 +21,7 @@
 import logging
 logging.debug('Beginning main.py')
 import os
+import sys
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
