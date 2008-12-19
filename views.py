@@ -22,7 +22,6 @@ from google.appengine.api import urlfetch
 
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from django.views.decorators.cache import cache_control
 from django import http
 
 from decorator import *
@@ -196,7 +195,6 @@ def _get_cse_names(friendfeed_profile):
   return cse_names
 
 
-@cache_control(max_age=CACHE_EXPIRATION)
 @cacheable(keygen=request_keygen)
 def FaqView(request):
   """Prints the FAQ page."""
@@ -204,7 +202,6 @@ def FaqView(request):
   return render_to_response('faq.tmpl')
 
 
-@cache_control(max_age=CACHE_EXPIRATION)
 @cacheable(keygen=request_keygen)
 def HomeView(request):
   """Prints the ego ego homepage"""
@@ -237,7 +234,6 @@ def OsdRedirectView(request):
   return http.HttpResponsePermanentRedirect('/friendfeed/%s/osd/' % friendfeed_name)
 
 
-@cache_control(max_age=CACHE_EXPIRATION)
 @cacheable(keygen=request_keygen)
 def UserView(request, nickname):
   """A request handler that generates a few demos."""
@@ -254,7 +250,6 @@ def UserView(request, nickname):
   return render_to_response('user.tmpl', template_data)
 
 
-@cache_control(max_age=CACHE_EXPIRATION)
 @cacheable(keygen=request_keygen)
 def CrefView(request, nickname):
   """A request handler that generates CustomSearch cref files."""
@@ -281,7 +276,6 @@ def CrefView(request, nickname):
   return http.HttpResponse(template_string, mimetype=CREF_MIMETYPE)
 
 
-@cache_control(max_age=CACHE_EXPIRATION)
 @cacheable(keygen=request_keygen)
 def AnnotationView(request, nickname, start_index=0):
   """A request handler that generates CustomSearch annotation file."""
@@ -306,7 +300,6 @@ def AnnotationView(request, nickname, start_index=0):
   return http.HttpResponse(template_string, mimetype=ANNOTATIONS_MIMETYPE)
 
 
-@cache_control(max_age=CACHE_EXPIRATION)
 @cacheable(keygen=request_keygen)
 def OsdView(request, nickname):
   """A request handler that generates an opensearch description document."""
@@ -323,4 +316,3 @@ def OsdView(request, nickname):
   # Django 0.96's render_to_response does not take a mimetype parameter
   template_string = render_to_string('osd.tmpl', template_data)
   return http.HttpResponse(template_string, mimetype=OSD_MIMETYPE)
-
