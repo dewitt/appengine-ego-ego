@@ -1,5 +1,8 @@
-{% if nickname %}
 <Annotation about="friendfeed.com/{{ nickname }}">
+  <Label name="include"/>
+</Annotation>  
+
+<Annotation about="friendfeed.com/{{ nickname }}/*">
   <Label name="include"/>
 </Annotation>  
 
@@ -22,8 +25,6 @@
 <Annotation about="friendfeed.com/{{ nickname }}/comments?start=*"  score="1.0">
   <Label name="include"/>
 </Annotation>
-
-{% endif %}
 
 {% for cse_name in cse_names %}
 <Annotation about="{{ cse_name }}" score="0.5">
