@@ -447,7 +447,7 @@ def Main():
     '/friendfeed/{nickname:word}/annotations/', AnnotationView)
   dispatcher.add_get_handler(
     '/friendfeed/{nickname:word}/annotations/list/', AnnotationListView)
-  dispatcher.add_post_handler('/resetresetreset/', ResetView)
+  # dispatcher.add_post_handler('/resetresetreset/', ResetView)
   dispatcher.add_get_handler('/statsstatsstats/', StatsView)
   dispatcher.add_not_found_handler(NotFoundView)
 
