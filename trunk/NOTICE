@@ -8,5 +8,7 @@ The jQuery library (http://jquery.com/) is used under the terms of the MIT licen
 
 The YUI library (http://developer.yahoo.com/yui/) is used under the terms of the BSD license and is copyright Yahoo.  See http://developer.yahoo.com/yui/license.html for details.
 
+The WsgiDispatcher library (http://bitworking.org/news/163/WSGIDispatcher) is used under the terms of the MIT license and is copyright Joe Gregorio.  See http://code.google.com/p/robaccia/ for details.
+
 This code is made available under the Apache License and is copyright DeWitt Clinton.
 
