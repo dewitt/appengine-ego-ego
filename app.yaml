@@ -23,7 +23,7 @@ handlers:
   static_dir: static/js
 
 - url: /.*
-  script: main.py
+  script: ego.py
 
 
 
