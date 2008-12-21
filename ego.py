@@ -106,9 +106,10 @@ def cacheable(keygen=None, expiration=CACHE_EXPIRATION):
     else:
       logging.debug('Cache miss for %s' % local_key)
       result = f(*args, **kwargs)
-      logging.debug('Caching %s' % local_key)
-      if not memcache.add(global_key, result, expiration):
-        logging.error('Error caching response for %s.' % local_key)
+      if result:
+        logging.debug('Caching %s' % local_key)
+        if not memcache.add(global_key, result, expiration):
+          logging.error('Error caching response for %s.' % local_key)
     return result
 
   return decorator.decorator(call)
