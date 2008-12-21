@@ -1,0 +1,12 @@
+{% extends "base.tmpl" %}
+
+{% block content %}
+
+  <p><b>Cache hits:</b> {{ stats.hits }}</p>
+  <p><b>Cache misses:</b> {{ stats.misses }}</p>
+  <p><b>Cache byte_hits:</b> {{ stats.byte_hits }}</p>
+  <p><b>Cache items:</b> {{ stats.items }}</p>
+  <p><b>Cache bytes:</b> {{ stats.bytes }}</p>
+  <p><b>Cache oldest_item_age:</b> {{ stats.oldest_item_age }}</p>
+
+{% endblock content %}
