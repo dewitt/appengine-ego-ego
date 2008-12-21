@@ -343,6 +343,18 @@ def AnnotationListView(request, nickname):
     'annotation_list.tmpl', template_data, content_type=ANNOTATIONS_MIMETYPE)
 
 
+def ResetView(request):
+  """Flushes the caches."""
+  memcache.flush_all()
+  return webob.exc.HTTPSeeOther(location='/')  
+
+
+def StatsView(request):
+  """Prints a page of memcache stats."""
+  template_data = {'stats': memcache.get_stats()}
+  return TemplateResponse('stats.tmpl', template_data)
+
+
 class Dispatcher(object):
   """A URL dispatcher build on wsgidispatcher.Dispatcher.
 
@@ -435,6 +447,8 @@ def Main():
     '/friendfeed/{nickname:word}/annotations/', AnnotationView)
   dispatcher.add_get_handler(
     '/friendfeed/{nickname:word}/annotations/list/', AnnotationListView)
+  dispatcher.add_post_handler('/resetresetreset/', ResetView)
+  dispatcher.add_get_handler('/statsstatsstats/', StatsView)
   dispatcher.add_not_found_handler(NotFoundView)
 
   run_wsgi_app(dispatcher.get_app())
