@@ -36,6 +36,7 @@ OSD_MIMETYPE = 'application/opensearchdescription+xml'
 CACHE_EXPIRATION = 3600
 VALID_CSE_RE = re.compile(r'\w+\.[\w\\]+')
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
+ANNOTATIONS_URL_TEMPLATE = 'http://ego-ego.appspot.com/friendfeed/%s/annotations/list/'
 
 
 class ReportableError(Exception):
@@ -225,6 +226,17 @@ def get_friend_nicknames(friendfeed_profile):
   return friend_nicknames
 
 
+def get_annotations(nickname):
+  """Retrieve the annotation file for given user."""
+  url = ANNOTATIONS_URL_TEMPLATE % nickname
+  result = get_url(url)
+  if result.status_code != 200:
+    logging.debug('Could not load %s' % url)
+    annotation = ''
+  else:
+    return result.content
+
+
 def NotFoundView(request):
   """Print a 404 page"""
   logging.debug('Beginning NotFound handler')
@@ -283,6 +295,7 @@ def OsdView(request, nickname):
   return TemplateResponse('osd.tmpl', template_data, content_type=OSD_MIMETYPE)
 
 
+
 @cacheable(keygen=request_keygen)
 def CrefView(request, nickname):
   """A request handler that generates CustomSearch cref files."""
@@ -292,33 +305,26 @@ def CrefView(request, nickname):
   try:
     friendfeed_profile = get_friendfeed_profile(nickname)
     name = get_friendfeed_name(friendfeed_profile, nickname)
-    cse_names = get_cse_names(friendfeed_profile)
+    annotations = get_annotations(nickname)
   except UserError:
-    cse_names = []
+    annotations = ''
     nickname = None
     name = None
-  template_data = {'nickname': nickname, 'name':  name, 'cse_names': cse_names}
+  template_data = {'nickname': nickname, 'name':  name, 'annotations': annotations}
   return TemplateResponse('cref.tmpl', template_data, content_type=CREF_MIMETYPE)
 
 
 @cacheable(keygen=request_keygen)
-def AnnotationView(request, nickname, start_index=None):
+def AnnotationView(request, nickname):
   """A request handler that generates CustomSearch annotation file."""
   logging.debug('Beginning AnnotationView handler')
   if not request.path.islower():
     return webob.exc.HTTPMovedPermanently(location=request.path.lower())
-  if start_index is None:
-    start_index = 0
-  else:
-    start_index = int(start_index)
   try:
-    friendfeed_profile = get_friendfeed_profile(nickname)
-    all_cse_names = get_cse_names(friendfeed_profile)
+    annotations = get_annotations(nickname)
   except UserError:
-    all_cse_names = []
-  end_index = min(len(all_cse_names), start_index + 50)
-  cse_names = all_cse_names[start_index:end_index]
-  template_data = {'cse_names': cse_names}
+    annotations = ''
+  template_data = {'annotations': annotations}
   return TemplateResponse(
     'annotations.tmpl', template_data, content_type=ANNOTATIONS_MIMETYPE)
 
@@ -329,12 +335,9 @@ def AnnotationListView(request, nickname):
   logging.debug('Beginning AnnotationListView handler')
   if not request.path.islower():
     return webob.exc.HTTPMovedPermanently(location=request.path.lower())
-  try:
-    friendfeed_profile = get_friendfeed_profile(nickname)
-    cse_names = get_cse_names(friendfeed_profile)
-  except UserError:
-    cse_names = []
-  template_data = {'cse_names': cse_names}
+  friendfeed_profile = get_friendfeed_profile(nickname)
+  cse_names = get_cse_names(friendfeed_profile)
+  template_data = {'nickname': nickname, 'cse_names': cse_names}
   return TemplateResponse(
     'annotation_list.tmpl', template_data, content_type=ANNOTATIONS_MIMETYPE)
 
@@ -428,8 +431,7 @@ def Main():
   dispatcher.add_get_handler('/friendfeed/{nickname:word}/osd/', OsdView)
   dispatcher.add_get_handler('/friendfeed/{nickname:word}/cref/', CrefView)
   dispatcher.add_get_handler(
-    '/friendfeed/{nickname:word}/annotations[/{start_index:digits}]/', 
-    AnnotationView)
+    '/friendfeed/{nickname:word}/annotations/', AnnotationView)
   dispatcher.add_get_handler(
     '/friendfeed/{nickname:word}/annotations/list/', AnnotationListView)
   dispatcher.add_not_found_handler(NotFoundView)
