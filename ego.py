@@ -323,6 +323,22 @@ def AnnotationView(request, nickname, start_index=None):
     'annotations.tmpl', template_data, content_type=ANNOTATIONS_MIMETYPE)
 
 
+@cacheable(keygen=request_keygen)
+def AnnotationListView(request, nickname):
+  """A request handler that generates CustomSearch annotation file."""
+  logging.debug('Beginning AnnotationListView handler')
+  if not request.path.islower():
+    return webob.exc.HTTPMovedPermanently(location=request.path.lower())
+  try:
+    friendfeed_profile = get_friendfeed_profile(nickname)
+    cse_names = get_cse_names(friendfeed_profile)
+  except UserError:
+    cse_names = []
+  template_data = {'cse_names': cse_names}
+  return TemplateResponse(
+    'annotation_list.tmpl', template_data, content_type=ANNOTATIONS_MIMETYPE)
+
+
 class Dispatcher(object):
   """A URL dispatcher build on wsgidispatcher.Dispatcher.
 
@@ -403,7 +419,8 @@ class Dispatcher(object):
 def Main():
   logging.debug('Beginning Main()')
   dispatcher = Dispatcher()
-  dispatcher.add_error_handler(ExceptionView)
+  if not os.environ['SERVER_SOFTWARE'].startswith('Dev'):
+    dispatcher.add_error_handler(ExceptionView)
   dispatcher.add_get_handler('/', HomeView)
   dispatcher.add_get_handler('/faq/', FaqView)
   dispatcher.add_post_handler('/user/', UserRedirectView)
@@ -413,6 +430,8 @@ def Main():
   dispatcher.add_get_handler(
     '/friendfeed/{nickname:word}/annotations[/{start_index:digits}]/', 
     AnnotationView)
+  dispatcher.add_get_handler(
+    '/friendfeed/{nickname:word}/annotations/list/', AnnotationListView)
   dispatcher.add_not_found_handler(NotFoundView)
 
   run_wsgi_app(dispatcher.get_app())
