@@ -34,7 +34,7 @@ CREF_MIMETYPE = 'text/xml'
 ANNOTATIONS_MIMETYPE = 'text/xml'
 OSD_MIMETYPE = 'application/opensearchdescription+xml'
 CACHE_EXPIRATION = 3600
-VALID_CSE_RE = re.compile(r'\w+\.[\w\\]+')
+VALID_CSE_RE = re.compile(r'^[a-zA-Z0-9]+\.[\w\\]+')
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 ANNOTATIONS_URL_TEMPLATE = 'http://ego-ego.appspot.com/friendfeed/%s/annotations/list/'
 
@@ -171,32 +171,43 @@ def get_friendfeed_profile(nickname):
 
 def get_cse_names(friendfeed_profile):
   """Return a list of cse site urls from the profile."""
-  cse_names = []
+  cse_patterns = []
   try:
     services = friendfeed_profile['services']
   except KeyError:
-    return cse_names
-  for service in services:
-    try:
-      cse_name = service['profileUrl']
-      cse_name = escape(cse_name)
-    except KeyError:
-      logging.warning('No profileUrl in  %s' % service)
-      continue
-    if cse_name.startswith('http://'):
-      cse_name = cse_name[7:]
-    if not VALID_CSE_RE.match(cse_name):
-      logging.warning('Invalid cse name for %s' % service)
-      continue
-    if cse_name.endswith('/'):
-      cse_names.append(cse_name)
-      cse_names.append(cse_name + '*')
-    elif '?' in cse_name:
-      cse_names.append(cse_name)
-    else:
-      cse_names.append(cse_name)
-      cse_names.append(cse_name + '/*')
-  return cse_names
+    logging.debug('No services found in profile.')
+  else:
+    for service in services:
+      try:
+        profile_url = service['profileUrl']
+      except KeyError:
+        logging.warning('No profileUrl in  %s' % service)
+      else:
+        cse_patterns.extend(profile_url_to_cse_patterns(profile_url))
+  return cse_patterns
+
+
+def profile_url_to_cse_patterns(profile_url):
+  """Returns a list of CSE patterns for a given profile URL."""
+  if not profile_url:
+    return []
+  profile_url = escape(profile_url)
+  if profile_url.startswith('http://'):
+    profile_url = profile_url[len('http://'):]
+  if not VALID_CSE_RE.match(profile_url):
+    logging.warning('Invalid cse name for %s' % profile_url)
+    return []
+
+  cse_patterns = []
+  if profile_url.endswith('/'):
+    cse_patterns.append(profile_url)
+    cse_patterns.append(profile_url + '*')
+  elif '?' in profile_url:
+    cse_patterns.append(profile_url)
+  else:
+    cse_patterns.append(profile_url)
+    cse_patterns.append(profile_url + '/*')
+  return cse_patterns
 
 
 def get_friendfeed_name(friendfeed_profile, friendfeed_name):
@@ -447,7 +458,7 @@ def Main():
     '/friendfeed/{nickname:word}/annotations/', AnnotationView)
   dispatcher.add_get_handler(
     '/friendfeed/{nickname:word}/annotations/list/', AnnotationListView)
-  # dispatcher.add_post_handler('/resetresetreset/', ResetView)
+  dispatcher.add_post_handler('/resetresetreset/', ResetView)
   dispatcher.add_get_handler('/statsstatsstats/', StatsView)
   dispatcher.add_not_found_handler(NotFoundView)
 
