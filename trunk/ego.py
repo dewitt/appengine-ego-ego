@@ -51,6 +51,9 @@ class ReportableError(Exception):
     """
     self.message = message
 
+  def __str__(self):
+    return '%s: %s' % (type(self), self.message)
+
 
 class UserError(ReportableError):
   """An 400 error caused by user behavior."""
@@ -446,6 +449,8 @@ def init():
   logging.debug('init()')
   global dispatcher
   dispatcher = Dispatcher()
+  if not os.environ['SERVER_SOFTWARE'].startswith('Dev'):
+    dispatcher.add_error_handler(ExceptionView)
   dispatcher.add_get_handler('/', HomeView)
   dispatcher.add_get_handler('/faq/', FaqView)
   dispatcher.add_post_handler('/user/', UserRedirectView)
