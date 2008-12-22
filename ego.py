@@ -34,7 +34,7 @@ CREF_MIMETYPE = 'text/xml'
 ANNOTATIONS_MIMETYPE = 'text/xml'
 OSD_MIMETYPE = 'application/opensearchdescription+xml'
 CACHE_EXPIRATION = 3600
-VALID_CSE_RE = re.compile(r'^[a-zA-Z0-9]+\.[\w\\]+')
+VALID_CSE_RE = re.compile(r'^[a-zA-Z0-9][\w\-]+\.[a-zA-Z0-9][\w\-]+')
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 ANNOTATIONS_URL_TEMPLATE = 'http://ego-ego.appspot.com/friendfeed/%s/annotations/list/'
 
